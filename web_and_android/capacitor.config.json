@@ -1,0 +1,27 @@
+{
+  "appId": "ai.hilal.app",
+  "appName": "Hilal AI",
+  "webDir": "web",
+  "server": {
+    "androidScheme": "https",
+    "allowNavigation": ["*"]
+  },
+  "plugins": {
+    "Keyboard": { "resizeOnFullScreen": true },
+    "SplashScreen": {
+      "launchAutoHide": true,
+      "launchShowDuration": 1600,
+      "backgroundColor": "#000000",
+      "androidSplashResourceName": "splash",
+      "androidScaleType": "CENTER",
+      "showSpinner": false,
+      "splashFullScreen": true,
+      "splashImmersive": true
+    },
+    "AdMob": {
+      "initialized": true,
+      "appId": "ca-app-pub-3940256099942544~3347511713",
+      "testMode": true
+    }
+  }
+}

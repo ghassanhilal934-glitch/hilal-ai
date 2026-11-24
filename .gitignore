@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+backend/hilal.db
+backend/hilal.db-shm
+backend/hilal.db-wal
+backend/.env
+backend/outputs/*
+!backend/outputs/.gitkeep
+web_and_android/node_modules/
+web_and_android/android/
+web_and_android/Hilal-AI.apk

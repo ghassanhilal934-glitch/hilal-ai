@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>Hilal AI</title>
+  <style>
+    body{width:360px;font-family:system-ui,'Cairo',sans-serif;background:#0b0b12;color:#eef0f6;margin:0;padding:14px}
+    h1{font-size:17px;margin:0 0 10px;display:flex;align-items:center;gap:8px}
+    h1 img{width:28px;height:28px;border-radius:7px}
+    .row{display:flex;gap:6px;margin-bottom:10px}
+    button,input,textarea{font-family:inherit}
+    button{background:#171724;color:#eef0f6;border:1px solid rgba(255,255,255,.1);border-radius:9px;padding:7px 10px;cursor:pointer}
+    button.active{background:#8b7dff;border-color:#8b7dff}
+    textarea{width:100%;height:76px;background:#11111c;color:#fff;border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:9px;resize:none;outline:none}
+    #go{width:100%;background:linear-gradient(135deg,#8b7dff,#6d5cf0);border:0;font-weight:700;margin-top:7px}
+    #out{margin-top:10px;font-size:12px;line-height:1.8;max-height:190px;overflow:auto;white-space:pre-wrap}
+    small{color:#9aa0b5}
+  </style>
+</head>
+<body>
+  <h1><img src="icon48.png" alt="Hilal AI" /> Hilal AI</h1>
+  <div class="row">
+    <button class="mode active" data-mode="chat">💬 محادثة</button>
+    <button class="mode" data-mode="image">🖼️ صورة</button>
+    <button class="mode" data-mode="audio">🎙️ صوت</button>
+  </div>
+  <textarea id="q" placeholder="اكتب سؤالك أو وصف الصورة..."></textarea>
+  <button id="go">إرسال 🚀</button>
+  <div id="out"><small>اضبط رابط الخادم من الإعدادات في الواجهة الكاملة أولاً.</small></div>
+  <script src="popup.js"></script>
+</body>
+</html>

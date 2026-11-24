@@ -1,0 +1,19 @@
+{
+  "name": "hilal-ai",
+  "version": "1.0.0",
+  "description": "Hilal AI — منصة ذكاء اصطناعي عربية بمحركات مجانية",
+  "scripts": {
+    "build": "echo 'No build step: static web folder is used directly'",
+    "cap:sync": "cap sync android",
+    "cap:open": "cap open android"
+  },
+  "dependencies": {
+    "@capacitor-community/admob": "^6.0.0",
+    "@capacitor/splash-screen": "^6.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.0.0",
+    "@capacitor/core": "^6.0.0",
+    "@capacitor/android": "^6.0.0"
+  }
+}

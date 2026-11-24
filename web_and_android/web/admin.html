@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hilal AI — لوحة المدير</title>
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/admin.css">
+</head>
+<body class="admin-body">
+  <!-- شاشة الدخول -->
+  <div class="admin-login" id="loginScreen">
+    <div class="login-card">
+      <div class="admin-logo">🌙</div>
+      <h1>Hilal AI</h1>
+      <p>لوحة تحكم المدير</p>
+      <input id="adminPass" type="password" placeholder="كلمة مرور المدير" dir="ltr"
+             autocomplete="current-password">
+      <button class="primary" id="adminLoginBtn">دخول المدير</button>
+      <p class="login-error" id="loginError"></p>
+      <a href="/" class="back-link">← العودة للتطبيق</a>
+    </div>
+  </div>
+
+  <!-- اللوحة -->
+  <div class="admin-app" id="adminApp" hidden>
+    <header class="admin-header">
+      <div class="admin-title"><span>🌙</span><strong>Hilal AI</strong><small>لوحة المدير</small></div>
+      <div class="admin-actions">
+        <a href="/" class="ghost">فتح التطبيق ↗</a>
+        <button class="ghost" id="adminRefresh">تحديث</button>
+        <button class="ghost" id="adminLogout">خروج</button>
+      </div>
+    </header>
+
+    <main class="admin-main">
+      <section class="stats" id="stats"></section>
+
+      <section class="admin-grid">
+        <div class="admin-card wide">
+          <div class="card-head"><h2>إدارة المستخدمين</h2><input id="userSearch" placeholder="بحث بالبريد..."></div>
+          <div class="table-wrap"><table id="usersTable">
+            <thead><tr><th>البريد</th><th>النقاط</th><th> مدفوعة</th><th>الدعوة</th><th>التاريخ</th><th>إجراءات</th></tr></thead>
+            <tbody></tbody>
+          </table></div>
+        </div>
+
+        <div class="admin-card">
+          <h2>منح نقاط يدوياً</h2>
+          <label>البريد الإلكتروني</label>
+          <input id="pointsEmail" type="email" dir="ltr" placeholder="user@example.com">
+          <label>عدد النقاط (يمكن سالب)</label>
+          <input id="pointsAmount" type="number" step="0.5" value="5" dir="ltr">
+          <label>ملاحظة (اختياري)</label>
+          <input id="pointsNote" placeholder="سبب المنح">
+          <button class="primary" id="addPointsBtn">إضافة النقاط</button>
+          <p class="form-msg" id="pointsMsg"></p>
+
+          <hr>
+          <h2>حظر مستخدم</h2>
+          <label>البريد الإلكتروني</label>
+          <input id="banEmail" type="email" dir="ltr" placeholder="user@example.com">
+          <div class="ban-actions">
+            <button class="danger" id="banBtn">حظر</button>
+            <button class="ghost" id="unbanBtn">فك الحظر</button>
+          </div>
+          <p class="form-msg" id="banMsg"></p>
+        </div>
+
+        <div class="admin-card wide">
+          <h2>سجل مدفوعات USDT (BEP20)</h2>
+          <div class="table-wrap"><table id="paymentsTable">
+            <thead><tr><th>TxID</th><th>البريد</th><th>الباقة</th><th>المبلغ</th><th>النقاط</th><th>التاريخ</th></tr></thead>
+            <tbody></tbody>
+          </table></div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <div class="toast" id="toast"></div>
+  <script src="/admin.js"></script>
+</body>
+</html>
