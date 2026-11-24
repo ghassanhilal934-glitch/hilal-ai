@@ -34,6 +34,9 @@ jobs:
       - name: Add Android platform
         run: npx cap add android || true
 
+      - name: Patch Android build config (AdMob ID + cleartext)
+        run: python tools/patch_android_build.py
+
       - name: Setup Python for brand assets
         uses: actions/setup-python@v5
         with:
@@ -50,17 +53,8 @@ jobs:
       - name: Sync web assets
         run: npx cap sync android
 
-      - name: Patch network security (allow HTTP during dev)
-        run: |
-          mkdir -p android/app/src/main/res/xml
-          cat > android/app/src/main/res/xml/network_security_config.xml <<'EOF'
-          <?xml version="1.0" encoding="utf-8"?>
-          <network-security-config>
-            <base-config cleartextTrafficPermitted="true" />
-          </network-security-config>
-          EOF
-          grep -q networkSecurityConfig android/app/src/main/AndroidManifest.xml || \
-          sed -i 's|<application |<application android:networkSecurityConfig="@xml/network_security_config" |' android/app/src/main/AndroidManifest.xml
+      - name: Re-apply Android patch after sync (safety check)
+        run: python tools/patch_android_build.py
 
       - name: Build debug APK
         run: |

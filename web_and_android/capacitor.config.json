@@ -2,6 +2,9 @@
   "appId": "ai.hilal.app",
   "appName": "Hilal AI",
   "webDir": "web",
+  "android": {
+    "allowMixedContent": true
+  },
   "server": {
     "androidScheme": "https",
     "allowNavigation": ["*"]

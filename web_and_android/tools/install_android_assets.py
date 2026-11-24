@@ -36,6 +36,8 @@ def main() -> None:
 
     res = ANDROID / "app" / "src" / "main" / "res"
     icon = Image.open(ICON).convert("RGBA")
+    if icon.size != (512, 512):
+        raise SystemExit(f"أبعاد icon غير متوقعة: {icon.size} (المطلوب 512×512)")
 
     for folder, size in DENSITIES.items():
         target_dir = res / folder
@@ -54,12 +56,18 @@ def main() -> None:
                 f.unlink()
                 print(f"✓ تمت إزالة {name} القديمة")
 
-    # شاشة الترحيب: nodpi تمنع التشويه وتحافظ على التوسيط
-    for folder in ("drawable", "drawable-nodpi"):
-        d = res / folder
-        d.mkdir(parents=True, exist_ok=True)
-        Image.open(SPLASH).convert("RGB").save(d / "splash.png", "PNG", optimize=True)
-        print(f"✓ {folder}/splash.png")
+    # شاشة الترحيب: nodpi فقط كي لا تُكبّرها أندرويد 2-3 أضعاف على الشاشات الكثيفة (OOM)
+    splash = Image.open(SPLASH).convert("RGB")
+    if splash.size != (1080, 1920):
+        raise SystemExit(f"أبعاد splash غير متوقعة: {splash.size} (المطلوب 1080×1920)")
+    splash_dir = res / "drawable-nodpi"
+    splash_dir.mkdir(parents=True, exist_ok=True)
+    splash.save(splash_dir / "splash.png", "PNG", optimize=True, compress_level=9)
+    legacy_splash = res / "drawable" / "splash.png"
+    if legacy_splash.is_file():
+        legacy_splash.unlink()
+        print("✓ تمت إزالة drawable/splash.png القديمة")
+    print("✓ drawable-nodpi/splash.png (1080×1920)")
 
     # تأكد أنManifest يشير إلى أيقونتنا
     manifest = ANDROID / "app" / "src" / "main" / "AndroidManifest.xml"

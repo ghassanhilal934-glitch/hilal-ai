@@ -4,8 +4,8 @@
 Hilal AI — مولّد الهوية البصرية باستخدام مكتبة Pillow.
 
 يولّد:
-  assets/icon.png      1024×1024  أيقونة التطبيق (خلفية سوداء نقية #000000)
-  assets/splash.png    2732×2732  شاشة الترحيب + عبارة الراعي الرسمي
+  assets/icon.png      512×512    أيقونة التطبيق (خلفية سوداء نقية #000000)
+  assets/splash.png    1080×1920  شاشة الترحيب + عبارة الراعي الرسمي
   web/logo.png         128×128    شعار الواجهة العلوية
   chrome_extension/icon*.png      أيقونات إضافة كروم 16/32/48/128
 
@@ -45,6 +45,16 @@ GOLD_LOW = (205, 140, 44)
 GOLD_END = (247, 200, 108)
 WHITE_TOP = (255, 255, 255)
 WHITE_LOW = (222, 226, 238)
+
+# أبعاد آمنة للذاكرة على أندرويد (1080×1920 ≈ 8MB عند فك الترميز بدل ~30MB)
+ICON_SIZE = 512
+SPLASH_SIZE = (1080, 1920)
+
+GOLD_STOPS = [
+    (0.0, GOLD_TOP), (0.30, GOLD_MID), (0.55, GOLD_LOW),
+    (0.75, GOLD_MID), (1.0, GOLD_END),
+]
+WHITE_STOPS = [(0.0, WHITE_TOP), (0.62, WHITE_LOW), (1.0, GOLD_MID)]
 
 
 def find_font(*names: str, bold: bool = True) -> str:
@@ -138,16 +148,21 @@ def draw_text_shiny(
     return (center_x - total / 2, y + top, center_x + total / 2, y + bottom)
 
 
-def render(size: int, sponsor: bool = False) -> Image.Image:
-    """يرسم شعار H Ai على خلفية سوداء نقية، مع الراعي في شاشة الترحيب."""
-    img = Image.new("RGBA", (size, size), BLACK)
+def render(size: int | tuple[int, int], sponsor: bool = False) -> Image.Image:
+    """يرسم شعار H Ai على خلفية سوداء نقية، مع الراعي في شاشة الترحيب.
+
+    يقبل size إما رقماً مربعاً (الأيقونة) أو زوجاً (عرض، ارتفاع) للـ splash.
+    """
+    width, height = (size, size) if isinstance(size, int) else size
+    side = min(width, height)
+    img = Image.new("RGBA", (width, height), BLACK)
 
     h_font = find_font(bold=True)
     ai_font = find_font(bold=True)
 
-    h_size = int(size * 0.60)
-    ai_size = int(size * 0.315)
-    gap = int(size * 0.035)
+    h_size = int(side * 0.60)
+    ai_size = int(side * 0.315)
+    gap = int(side * 0.035)
 
     probe = ImageDraw.Draw(img)
     hb = probe.textbbox((0, 0), "H", font=ImageFont.truetype(h_font, h_size))
@@ -156,29 +171,23 @@ def render(size: int, sponsor: bool = False) -> Image.Image:
     aw = ab[2] - ab[0]
     total = hw + gap + aw
 
-    start_x = (size - total) / 2 - hb[0]
-    center_y = size / 2
+    start_x = (width - total) / 2 - hb[0]
+    center_y = height / 2
 
     # H ذهبي لامع large
-    draw_text_shiny(
-        img, "H", h_font, h_size,
-        start_x + hw / 2, center_y,
-        [(0.0, GOLD_TOP), (0.30, GOLD_MID), (0.55, GOLD_LOW),
-         (0.75, GOLD_MID), (1.0, GOLD_END)],
-    )
+    draw_text_shiny(img, "H", h_font, h_size, start_x + hw / 2, center_y, GOLD_STOPS)
 
     # Ai أبيض متناسق مع وميض ذهبي خفيف
     ai_x = start_x + hw + gap - ab[0]
     draw_text_shiny(
         img, "Ai", ai_font, ai_size,
-        ai_x + aw / 2, center_y + h_size * 0.02,
-        [(0.0, WHITE_TOP), (0.62, WHITE_LOW), (1.0, GOLD_MID)],
+        ai_x + aw / 2, center_y + h_size * 0.02, WHITE_STOPS,
     )
 
     if sponsor:
         draw_text_shiny(
-            img, SPONSOR, find_font(bold=False), int(size * 0.028),
-            size / 2, size * 0.90,
+            img, SPONSOR, find_font(bold=False), int(side * 0.028),
+            width / 2, height * 0.90,
             [(0.0, GOLD_TOP), (0.55, GOLD_MID), (1.0, GOLD_END)],
         )
 
@@ -196,16 +205,18 @@ def _font_or_die() -> str:
     raise RuntimeError("لم يتم العثور على خط عريض (TTF)")
 
 
-def _ffmpeg_wordmark(size: int, path: Path, sponsor: bool = False) -> None:
+def _ffmpeg_wordmark(size: int | tuple[int, int], path: Path, sponsor: bool = False) -> None:
     """مسار بديل حين لا تتوفر Pillow: رسم النص بخط حقيقي عبر ffmpeg."""
+    width, height = (size, size) if isinstance(size, int) else size
+    side = min(width, height)
     font = _font_or_die()
-    h_size = int(size * 0.585)
-    ai_size = int(size * 0.31)
-    off = max(2, int(size * 0.006))
-    # معاينة بصرية: هذه القيمة توسّط مجموعة "H Ai" أفقياً على الحجمين 1024 و2732
-    shift = int(size * 0.06)
-    h_v = int(size * 0.02)
-    ai_v = int(size * 0.045)
+    h_size = int(side * 0.585)
+    ai_size = int(side * 0.31)
+    off = max(2, int(side * 0.006))
+    # معاينة بصرية: هذه القيمة توسّط مجموعة "H Ai" أفقياً
+    shift = int(side * 0.06)
+    h_v = int(side * 0.02)
+    ai_v = int(side * 0.045)
     filters = [
         f"drawtext=fontfile={font}:text='H':fontsize={h_size}:"
         f"fontcolor=0xFFD98A:shadowcolor=0x7A521C:shadowx={off}:shadowy={off}:"
@@ -215,16 +226,16 @@ def _ffmpeg_wordmark(size: int, path: Path, sponsor: bool = False) -> None:
         f"x=w/2+{off}+{shift}:y=(h-th)/2+{ai_v}",
     ]
     if sponsor:
-        s_size = max(14, int(size * 0.026))
+        s_size = max(14, int(side * 0.026))
         filters.append(
             f"drawtext=fontfile={font}:text='Official Sponsor\\: Ghassan Hilal':"
             f"fontsize={s_size}:fontcolor=0xFFD98A:"
-            f"x=(w-tw)/2:y=h-th-{int(size * 0.06)}"
+            f"x=(w-tw)/2:y=h-th-{int(side * 0.06)}"
         )
     vf = ",".join(filters)
     cmd = [
         "ffmpeg", "-y", "-hide_banner", "-loglevel", "error",
-        "-f", "lavfi", "-i", f"color=c=black:s={size}x{size}",
+        "-f", "lavfi", "-i", f"color=c=black:s={width}x{height}",
         "-vf", vf, "-frames:v", "1", str(path),
     ]
     subprocess.run(cmd, check=True, capture_output=True, text=True, timeout=180)
@@ -233,10 +244,10 @@ def _ffmpeg_wordmark(size: int, path: Path, sponsor: bool = False) -> None:
 def _save_all_ffmpeg() -> None:
     if not shutil.which("ffmpeg"):
         raise SystemExit("Pillow غير مثبت و ffmpeg غير متاح. ثبّت Pillow: python -m pip install Pillow")
-    _ffmpeg_wordmark(1024, ASSETS / "icon.png")
-    _ffmpeg_wordmark(2732, ASSETS / "splash.png", sponsor=True)
-    print(f"✓ {ASSETS / 'icon.png'}  (1024×1024)")
-    print(f"✓ {ASSETS / 'splash.png'}  (2732×2732)")
+    _ffmpeg_wordmark(ICON_SIZE, ASSETS / "icon.png")
+    _ffmpeg_wordmark(SPLASH_SIZE, ASSETS / "splash.png", sponsor=True)
+    print(f"✓ {ASSETS / 'icon.png'}  ({ICON_SIZE}×{ICON_SIZE})")
+    print(f"✓ {ASSETS / 'splash.png'}  ({SPLASH_SIZE[0]}×{SPLASH_SIZE[1]})")
     for size in (16, 32, 48, 128):
         subprocess.run([
             "ffmpeg", "-y", "-hide_banner", "-loglevel", "error",
@@ -253,11 +264,12 @@ def save_all() -> None:
         _save_all_ffmpeg()
         return
 
-    icon = render(1024)
-    splash = render(2732, sponsor=True)
-    icon.save(ASSETS / "icon.png", "PNG", optimize=True)
-    splash.save(ASSETS / "splash.png", "PNG", optimize=True)
-    print(f"✓ {ASSETS / 'icon.png'}  (1024×1024)")
+    icon = render(ICON_SIZE)
+    splash = render(SPLASH_SIZE, sponsor=True)
+    # compress_level=9 يبقي الحجم صغيراً دون تغيير الأبعاد أو جودة العرض
+    icon.save(ASSETS / "icon.png", "PNG", optimize=True, compress_level=9)
+    splash.save(ASSETS / "splash.png", "PNG", optimize=True, compress_level=9)
+    print(f"✓ {ASSETS / 'icon.png'}  ({ICON_SIZE}×{ICON_SIZE})")
 
     # شعار الواجهة العلوية
     web_logo = icon.resize((128, 128), Image.LANCZOS)
@@ -272,7 +284,7 @@ def save_all() -> None:
     print("✓ chrome_extension/icon{16,32,48,128}.png")
 
     # شاشة الترحيب جاهزة أيضاً للنسخ إلى موارد أندرويد عبر install_android_assets.py
-    print(f"✓ {ASSETS / 'splash.png'}  (2732×2732)")
+    print(f"✓ {ASSETS / 'splash.png'}  ({SPLASH_SIZE[0]}×{SPLASH_SIZE[1]})")
 
 
 if __name__ == "__main__":
