@@ -1,0 +1,33 @@
+# Git / CI metadata
+.git
+.github
+**/.git
+**/.github
+
+# Python caches
+**/__pycache__
+**/*.py[cod]
+
+# Secrets and local state — never bake these into the image
+.env
+**/.env
+**/.env.*
+*.db
+**/*.db
+*.db-shm
+**/*.db-shm
+*.db-wal
+**/*.db-wal
+
+# Generated runtime output (recreated inside the container)
+outputs/*
+!outputs/.gitkeep
+backend/outputs/*
+!backend/outputs/.gitkeep
+
+# Local build artifacts not needed at runtime
+node_modules
+**/node_modules
+web_and_android/android
+web_and_android/Hilal-AI.apk
+*.log
