@@ -35,7 +35,6 @@ import auth
 from config import (
     APP_BASE_URL,
     BINANCE_BEP20_ADDRESS,
-    CORS_ORIGINS,
     FREE_CHAT_DAILY_LIMIT,
     IS_PRODUCTION,
     MAX_B64_CHARS,
@@ -73,7 +72,11 @@ from payments import (
     verify_payment,
 )
 
-WEB_DIR = Path(__file__).resolve().parent.parent / "web_and_android" / "web"
+# الواجهة الأمامية مُنسوخة داخل حزمة الباكند حتى تُخدم من نفس حاوية Render
+WEB_DIR = Path(__file__).resolve().parent / "www"
+if not WEB_DIR.is_dir():
+    # توافق مع التشغيل المحلي القديم قبل نسخ الواجهة إلى backend/www
+    WEB_DIR = Path(__file__).resolve().parent.parent / "web_and_android" / "web"
 
 # في الإنتاج تُغلق نقاط التوثيق نهائياً
 app = FastAPI(
@@ -135,10 +138,11 @@ async def security_headers(request: Request, call_next):
     return response
 
 
-# CORS صريح — لا يوجد نطاق "*" مفتوح
+# CORS مفتوح لكل النطاقات: الواجهة تُخدم من Render، والتطبيق من Capacitor،
+# وقد تُفتح من نطاقات مخصصة أخرى، لذا نسمح بجميع المصادر صراحةً.
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=CORS_ORIGINS,
+    allow_origins=["*"],
     allow_credentials=False,
     allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["Authorization", "Content-Type"],
@@ -472,6 +476,16 @@ def ads_claim(request: Request, payload: AdTicketIn,
         return ads_engine.claim_ticket(ticket, user["id"])
     except ads_engine.AdError as exc:
         raise HTTPException(400, str(exc)) from exc
+
+
+# ----------------------------- الواجهة الرئيسية -----------------------------
+@app.get("/")
+def index_page() -> FileResponse:
+    """عرض موقع Hilal AI الكامل مباشرة على المسار الرئيسي."""
+    page = WEB_DIR / "index.html"
+    if not page.exists():
+        raise HTTPException(404, "ملف الواجهة غير موجود")
+    return FileResponse(page)
 
 
 # ----------------------------- لوحة المدير ---------------------------------

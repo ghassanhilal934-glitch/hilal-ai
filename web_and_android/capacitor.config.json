@@ -6,6 +6,7 @@
     "allowMixedContent": true
   },
   "server": {
+    "url": "https://hilal-ai-8s01.onrender.com",
     "androidScheme": "https",
     "allowNavigation": ["*"]
   },

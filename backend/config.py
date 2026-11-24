@@ -137,10 +137,12 @@ BSC_RPC_URLS = [
     if u.strip()
 ]
 MIN_CONFIRMATIONS = env_int("MIN_CONFIRMATIONS", 1)
-APP_BASE_URL = env("APP_BASE_URL", "http://localhost:8000").rstrip("/")
+APP_BASE_URL = env(
+    "APP_BASE_URL", "https://hilal-ai-8s01.onrender.com"
+).rstrip("/")
 HF_TOKEN = env("HF_TOKEN", "").strip() or None
 
-# CORS صريح — لا يوجد "*" في الإنتاج
+# حساسية الخطة: النطاقات الافتراضية للعمل المحلي؛ app.py يسمح بكل النطاقات صراحةً
 _default_origins = [
     APP_BASE_URL,
     "http://localhost:8000",

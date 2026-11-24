@@ -216,7 +216,7 @@ Authorization: Bearer <token>
 4. سجّل الدخول مباشرة؛ لا حاجة لضبط رابط الخادم يدوياً.
 
 > الواجهة تكتشف تلقائياً رابط الخادم:
-> - عند فتحها من المتصفح: تستخدم `window.location.origin` (مثلاً رابط HuggingFace Space أو `http://192.168.1.104:8000`).
+> - عند فتحها من المتصفح: تستخدم `window.location.origin` (مثلاً `https://hilal-ai-8s01.onrender.com`).
 > - داخل APK/Capacitor: تستخدم الرابط الثابت `DEFAULT_API_URL` المعرّف في `web_and_android/web/app.js`.
 >
 > لتغيير الرابط الافتراضي للـ APK، عدّل قيمة `DEFAULT_API_URL` في `web_and_android/web/app.js` إلى رابط الـ Space المنشور، ثم أعد بناء APK. تظهر القيمة نفسها في نافذة **الإعدادات → Default API URL** مع زر «استخدام الافتراضي».
@@ -257,7 +257,7 @@ curl -X POST http://localhost:8000/api/register \
 - تنظيف المدخلات: إزالة أحرف التحكم، حدود طول لكل حقل، فحص نوع الملف من **Magic Bytes** (وليس الامتداد)، حد 5MB، وأسماء ملفات `UUID` عشوائية.
 - رؤوس الحماية: `X-Content-Type-Options`, `X-Frame-Options`, `X-XSS-Protection`, `CSP`, `Referrer-Policy`, `Permissions-Policy`, و`HSTS` في الإنتاج.
 - نقاط التوثيق `/api/docs` و`/redoc` مغلقة في وضع `production`. أضف `ENVIRONMENT=development` محلياً فقط إذا أردتها.
-- CORS صريح من `CORS_ORIGINS` (لا يوجد `*`). القائمة الافتراضية تشمل رابط التطبيق، localhost، عناوين Capacitor، والـ LAN الحالي.
+- CORS مفتوح لجميع النطاقات (`allow_origins=["*"]` مع `allow_credentials=False`) كي تعمل الواجهة من Render والتطبيق الأصلي وأي نطاق مخصص.
 
 > ملاحظة: على Termux/arm64 لا تتوفر عجلة `bcrypt` مبنية مسبقاً؛ لذلك يعمل `passlib` تلقائياً بـ `pbkdf2_sha256`. في `Dockerfile` يُثبَّت `bcrypt` صراحةً فتُستخدم خوارزمية bcrypt في الإنتاج.
 
@@ -269,26 +269,19 @@ curl -X POST http://localhost:8000/api/register \
 
 ---
 
-## 11) رابط عالمي HTTPS للتجربة الفورية على الهواتف
+## 11) رابط النشر الدائم على Render
 
-**الرابط الحالي (Cloudflare، يعمل الآن):**
+**الرابط الدائم:**
 ```
-https://lounge-scholar-dream-powell.trycloudflare.com
-```
-
-بعد تشغيل الباكند على المنفذ 8000، شغّل النفق:
-
-```sh
-cd ~/social_bot/hilal_ai
-sh start_tunnel.sh
+https://hilal-ai-8s01.onrender.com
 ```
 
-- يفضّل السكربت **Cloudflare Quick Tunnel** (رابط `https://*.trycloudflare.com`) طالما بقيت العملية تعمل.
-- إن لم يكن `cloudflared` متاحاً، يستخدم **Pinggy** (رابط `https://*.pinggy.net` صالح 60 دقيقة).
+- الواجهة الكاملة منسوخة أيضاً إلى `backend/www` وتُقدَّم مباشرة على `/` من نفس الحاوية.
+- قيمة `DEFAULT_API_URL` في `web_and_android/web/app.js` (المستخدمة داخل APK) و`APP_BASE_URL` في `backend/config.py` تشيران إلى رابط Render، لذا تعمل روابط الدعوة والتطبيق من أي مكان.
+- مشروع أندرويد (Capacitor) يضبط `server.url` على الرابط نفسه؛ أي تحديث للموقع يظهر في APK فوراً بعد إعادة البناء.
+- عند تغيّر الرابط، حدّث هذه المواضع ثم أعد النشر وإعادة بناء APK.
 
-الواجهة تكتشف تلقائياً `window.location.origin`، لذا فتح الرابط العالمي على أي هاتف يعمل مباشرة دون إعداد CORS. قيمة `DEFAULT_API_URL` في `web_and_android/web/app.js` و`APP_BASE_URL` في `backend/.env` تشيران الآن إلى الرابط العالمي، لذا تعمل روابط الدعوة وAPK من أي مكان. عند تغيّر رابط النفق حدّثهما (أو غيّر الرابط من نافذة الإعدادات داخل التطبيق) ثم أعد تشغيل الباكند/APK.
-
-> روابط الأنفاق المجانية مؤقتة وتتغير عند إعادة التشغيل. للنشر الدائم استخدم HuggingFace Space (القسم 5) أو استضافة خادم مع نطاقك الخاص.
+> الخطة المجانية في Render تُوقف الخدمة بعد 15 دقيقة من عدم النشاط، وتعيد تشغيلها عند أول طلب ( قد يستغرق ذلك نحو دقيقة ). نظام الملفات مؤقت؛ استخدم Render Postgres إن احتجت حفظ البيانات طويلة الأمد.
 
 ---
 
@@ -297,7 +290,7 @@ sh start_tunnel.sh
 افتح:
 
 ```
-https://lounge-scholar-dream-powell.trycloudflare.com/admin
+https://hilal-ai-8s01.onrender.com/admin
 ```
 
 - كلمة المرور تُقرأ من `ADMIN_PASSWORD` في `backend/.env` (غيّرها قبل الإطلاق!).

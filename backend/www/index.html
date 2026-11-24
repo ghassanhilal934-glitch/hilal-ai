@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b0b12" />
+  <title>Hilal AI — هلال للذكاء الاصطناعي</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <img class="logo" src="logo.png" alt="Hilal AI" />
+        <div>
+          <strong>Hilal AI</strong>
+          <small>هلال للذكاء الاصطناعي</small>
+        </div>
+      </div>
+
+      <button class="new-chat" id="newChatBtn">＋ محادثة جديدة</button>
+
+      <div class="side-label">الأوضاع</div>
+      <nav class="side-nav">
+        <button class="side-item active" data-mode="study">🎓 مساعد الدراسة <span class="free-badge">مجاني 100%</span></button>
+        <button class="side-item" data-mode="chat">💬 المحادثة <span class="limit-badge">30/يوم</span></button>
+        <button class="side-item" data-mode="studio">🎨 تصميم وتعديل الصور <span class="cost-badge">0.5</span></button>
+        <button class="side-item" data-mode="image">🖼️ الصور</button>
+        <button class="side-item" data-mode="audio">🎙️ الصوتيات</button>
+        <button class="side-item" data-mode="video">🎬 فيديو ناطق</button>
+      </nav>
+
+      <div class="side-label">السجل</div>
+      <div class="history" id="historyList"><p class="muted">لا توجد محادثات بعد</p></div>
+
+      <div class="side-support" id="sideSupport">
+        <a class="support-main" href="#" data-mail-support data-subject="Hilal AI - Support Request">
+          <span class="support-ico">✉️</span>
+          <span><strong>تواصل معنا / الدعم الفني</strong><small>لأي استفسار عن الدفع أو النقاط</small></span>
+        </a>
+        <div class="support-copy">
+          <code data-support-email></code>
+          <button class="copy" type="button" data-copy-support>نسخ البريد</button>
+        </div>
+      </div>
+
+      <div class="side-footer">
+        <p class="sponsor-line">Official Sponsor: Ghassan Hilal</p>
+        <button id="authBtn" class="ghost">تسجيل الدخول</button>
+        <button id="settingsBtn" class="ghost">⚙️ الإعدادات</button>
+        <a href="/privacy" class="ghost">📄 سياسة الخصوصية</a>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="menu-btn" id="menuBtn">☰</button>
+        <img class="top-logo" src="logo.png" alt="Hilal AI" />
+        <div class="mode-tabs" id="modeTabs">
+          <button class="tab active" data-mode="chat">💬 محادثة</button>
+          <button class="tab" data-mode="study">🎓 مساعد الدراسة <span class="free-badge">مجاني</span></button>
+          <button class="tab" data-mode="studio">🎨 تصميم وتعديل الصور <span class="cost-badge">0.5</span></button>
+          <button class="tab" data-mode="image">🖼️ صور</button>
+          <button class="tab" data-mode="audio">🎙️ صوتيات</button>
+          <button class="tab" data-mode="video">🎬 فيديو ناطق</button>
+        </div>
+        <div class="top-actions">
+          <div class="points" id="pointsBadge">🌱 2 نقطة</div>
+          <button class="primary small" id="rechargeBtn">شحن النقاط</button>
+        </div>
+      </header>
+
+      <section class="content" id="content">
+        <div class="hero" id="hero">
+          <div class="hero-glow"></div>
+          <h1>مرحباً بك في <span>Hilal AI</span> 🌙</h1>
+          <p>🎓 مساعد الدراسة مجاني 100% بلا حدود · 💬 المحادثة 30 رسالة مجانية يومياً · 🎨 استوديو تصميم وتعديل الصور.</p>
+          <div class="templates" id="templates">
+            <button class="template" data-mode="study" data-prompt="اشرح لي درس الذكاء الاصطناعي ببساطة مع أمثلة">🧠 شرح درس</button>
+            <button class="template" data-mode="study" data-prompt="لخص هذا النص الطويل في خمس نقاط: ">📝 تلخيص نص</button>
+            <button class="template" data-mode="studio" data-prompt="صمّم شعاراً احترافياً لقناة تقنية عربية">🎨 تصميم شعار</button>
+            <button class="template" data-mode="chat" data-prompt="اكتب قصة رعب قصيرة ومشوقة بالعربية">👻 قصة رعب</button>
+          </div>
+          <p class="sponsor-line">Official Sponsor: Ghassan Hilal</p>
+        </div>
+        <div class="thread" id="thread"></div>
+      </section>
+
+      <footer class="composer-wrap">
+        <div class="quick-templates" id="quickTemplates">
+          <button class="qt" data-mode="study" data-prompt="اشرح لي درس الجبر خطوة بخطوة مع مثال تطبيقي">🎓 شرح درس</button>
+          <button class="qt" data-mode="study" data-prompt="اصنع اختباراً تدريبياً من عشرة أسئلة في اللغة العربية مع الإجابات">📝 اختبار تدريبي</button>
+          <button class="qt" data-mode="studio" data-prompt="صمّم هوية براند لمقهى عربي حديث: شعار وألوان ونص إعلاني">🏷️ شعار / براند</button>
+          <button class="qt" data-mode="studio" data-prompt="صمّم إعلان منتج احترافي لهاتف ذكي مع نص إعلاني جذاب">📢 إعلان منتج</button>
+          <button class="qt" data-mode="studio" data-prompt="صمّم منشور سوشيال ميديا لموسم رمضاني مع نسخة جاهزة للنشر">📱 منشور سوشيال</button>
+          <button class="qt" data-mode="image" data-prompt="صورة احترافية لشخص ببدلة رسمية أنيقة، إضاءة استوديو، خلفية رصينة، واقعية عالية الدقة">👔 صورة ببدلة رسمية</button>
+          <button class="qt" data-mode="video" data-prompt="أهلاً بكم في نشرة الأخبار. سنستعرض اليوم أبرز المستجدات في عالم الذكاء الاصطناعي والتقنية.">📰 مذيع أخبار</button>
+          <button class="qt" data-mode="audio" data-prompt="في صمت الصحراء، حيث تهمس الرياح بأسماءٍ مضت، تكمن حكاية لم تُروَ من قبل. تعالوا معنا في هذا الوثائقي القصير.">🎙️ تعليق صوتي وثائقي</button>
+        </div>
+        <div class="extra-inputs" id="extraInputs"></div>
+        <div class="composer">
+          <textarea id="promptInput" rows="1" placeholder="اسأل Hilal AI أي شيء..."></textarea>
+          <button class="attach" id="attachBtn" title="إرفاق صورة">📎</button>
+          <input type="file" id="fileInput" accept="image/*,audio/*" hidden />
+          <button class="send" id="sendBtn">➤</button>
+        </div>
+        <p class="hint" id="hint">30 رسالة مجانية يومياً · الاشتراك يفتح محادثة غير محدودة</p>
+        <p class="usage-line" id="chatUsage"></p>
+        <p class="sponsor-line footer-sponsor">Official Sponsor: Ghassan Hilal</p>
+      </footer>
+    </main>
+  </div>
+
+  <!-- نافذة الشحن -->
+  <div class="modal" id="rechargeModal">
+    <div class="modal-box">
+      <button class="close" data-close="rechargeModal">✕</button>
+      <h2>شحن النقاط 💎</h2>
+      <p class="muted">حوّل USDT على شبكة BEP20 ثم أدخل TxID للتحقق التلقائي.</p>
+      <div class="wallet">
+        <span>عنوان محفظتنا BEP20</span>
+        <code id="walletAddress">—</code>
+        <button class="copy" data-copy="walletAddress">نسخ</button>
+      </div>
+      <div class="packages" id="packageCards"></div>
+      <div class="verify-row">
+        <select id="packageSelect"></select>
+        <input id="txInput" placeholder="0x... معرّف المعاملة" dir="ltr" />
+        <button class="primary" id="verifyBtn">تحقق وأضف النقاط</button>
+      </div>
+      <div class="ad-box">
+        <div class="ad-head">
+          <strong>اربح نقاطاً مجانية 🎬</strong>
+          <span>شاهد إعلاناً واحصل على <b>0.5 نقطة</b></span>
+        </div>
+        <div class="ad-meta">
+          <span>المتبقي اليوم: <b id="adsRemaining">—</b> / 5</span>
+          <button class="primary small" id="watchAdBtn">شاهد الإعلان</button>
+        </div>
+        <p class="hint" id="adHint">يتطلب مشاهدة 25 ثانية على الأقل.</p>
+      </div>
+
+      <div class="invite">
+        <span>رابط الدعوة (لكل صديق +1 نقطة)</span>
+        <code id="inviteLink">سجّل الدخول أولاً</code>
+        <button class="copy" data-copy="inviteLink">نسخ</button>
+      </div>
+
+      <div class="support-box">
+        <span class="support-ico">✉️</span>
+        <span class="support-copy-text">
+          <strong>تواصل معنا / الدعم الفني</strong>
+          <small>أي استفسار حول الدفع أو النقاط؟ سنرد عليك عبر Gmail.</small>
+          <code data-support-email></code>
+        </span>
+        <span class="support-buttons">
+          <a class="primary small" href="#" data-mail-support data-subject="Hilal AI - Payment / Points Support">راسلنا ↗</a>
+          <button class="copy" type="button" data-copy-support>نسخ البريد</button>
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- نافذة مشاهدة الإعلان على الويب -->
+  <div class="modal" id="adModal">
+    <div class="modal-box small-box">
+      <button class="close" id="closeAdModal">✕</button>
+      <h2>إعلان ممول 🎬</h2>
+      <p class="muted">افتح الإعلان وانتظر انتهاء العدّ التنازلي، ثم استلم مكافأتك.</p>
+      <a id="adLink" class="ad-link" href="https://example.com" target="_blank" rel="noopener">افتح الإعلان في نافذة جديدة ↗</a>
+      <div class="countdown" id="adCountdown">25</div>
+      <p class="hint" id="adWaitHint">تبقّى 25 ثانية قبل تفعيل المكافأة</p>
+      <button class="primary" id="claimAdBtn" disabled>استلم 0.5 نقطة</button>
+    </div>
+  </div>
+
+  <!-- نافذة الدخول -->
+  <div class="modal" id="authModal">
+    <div class="modal-box small-box">
+      <button class="close" data-close="authModal">✕</button>
+      <h2>الدخول إلى Hilal AI</h2>
+      <input id="authEmail" type="email" placeholder="البريد الإلكتروني" dir="ltr" />
+      <input id="authPass" type="password" placeholder="كلمة المرور" dir="ltr" />
+      <input id="authInvite" placeholder="رمز دعوة (اختياري)" dir="ltr" />
+      <div class="auth-actions">
+        <button class="primary" id="loginBtn">دخول</button>
+        <button class="ghost" id="registerBtn">حساب جديد</button>
+      </div>
+      <p class="hint" id="authHint"></p>
+    </div>
+  </div>
+
+  <!-- نافذة الإعدادات -->
+  <div class="modal" id="settingsModal">
+    <div class="modal-box small-box">
+      <button class="close" data-close="settingsModal">✕</button>
+      <h2>الإعدادات</h2>
+      <label>رابط الخادم الخلفي</label>
+      <input id="apiBaseInput" dir="ltr" placeholder="https://hilal-ai-8s01.onrender.com" />
+      <p class="hint">Default API URL: <code id="defaultApiUrl" dir="ltr">—</code></p>
+      <p class="hint">يُستخدم رابط الصفحة الحالية تلقائياً في المتصفح، والرابط الثابت أعلاه داخل تطبيق APK.</p>
+      <div class="auth-actions">
+        <button class="ghost" id="resetApiBtn">استخدام الافتراضي</button>
+        <button class="primary" id="saveSettings">حفظ</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script src="support.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

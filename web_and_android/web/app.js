@@ -5,10 +5,10 @@
   const $ = (s) => document.querySelector(s);
   const $$ = (s) => Array.from(document.querySelectorAll(s));
 
-  // رابط ثابت يُستخدم داخل حزمة APK (Capacitor) حيث لا يكون origin هو الخادم
-  // رابط نفق Cloudflare عالمي (HTTPS) — يعمل من أي هاتف في العالم.
+  // رابط ثابت يُستخدم داخل حزمة APK (Capacitor) حيث لا يكون origin هو الخادم.
+  // الاستضافة الدائمة على Render — تعمل من أي متصفح أو هاتف في العالم.
   // يمكن تغييره من نافذة الإعدادات داخل التطبيق أو بإعادة بناء APK.
-  const DEFAULT_API_URL = 'https://lounge-scholar-dream-powell.trycloudflare.com';
+  const DEFAULT_API_URL = 'https://hilal-ai-8s01.onrender.com';
 
   function isNativeApp() {
     const cap = window.Capacitor;

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0b0b12" />
+  <title>سياسة الخصوصية — Hilal AI</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .legal{max-width:860px;margin:0 auto;padding:34px 18px 70px}
+    .legal-head{display:flex;align-items:center;gap:12px;margin-bottom:22px}
+    .legal-head img{width:46px;height:46px;border-radius:12px}
+    .legal h1{font-size:25px;margin:0;color:var(--accent2)}
+    .legal h2{font-size:17px;margin:26px 0 10px;color:var(--text)}
+    .legal p,.legal li{color:var(--muted);font-size:14px;line-height:2}
+    .legal ul{padding-inline-start:20px}
+    .legal .support-card{margin-top:30px}
+    .back-top{display:inline-block;margin-bottom:10px;color:var(--muted);text-decoration:none;font-size:13px}
+    .back-top:hover{color:var(--accent)}
+  </style>
+</head>
+<body class="legal-body">
+  <main class="legal">
+    <a class="back-top" href="/">← العودة إلى Hilal AI</a>
+    <div class="legal-head">
+      <img src="logo.png" alt="Hilal AI" />
+      <div><h1>سياسة الخصوصية</h1><small class="muted">Hilal AI — هلال للذكاء الاصطناعي</small></div>
+    </div>
+
+    <p>نحن في Hilal AI نحترم خصوصيتك. توضح هذه السياسة البيانات التي نجمعها وكيف نستخدمها وكيف يمكنك التواصل معنا أو طلب حذف بياناتك.</p>
+
+    <h2>1) البيانات التي نجمعها</h2>
+    <ul>
+      <li>البريد الإلكتروني وكلمة المرور (مخزّنة كتجزئة مشفّرة ولا تُحفظ كنص صريح).</li>
+      <li>رصيد النقاط، سجل استخدام الأوضاع، ورموز الدعوة.</li>
+      <li>في حالة الشحن: معرّف معاملة BEP20 (TxID) والمبلغ والباقة فقط، ولا نصل إلى محفظتك أو أموالك.</li>
+    </ul>
+
+    <h2>2) كيف نستخدم البيانات</h2>
+    <p>تُستخدم البيانات حصراً لتشغيل الحساب، احتساب النقاط، التحقق من المدفوعات، ومنع الغش وإساءة الاستخدام. لا نبيع بياناتك لأي جهة ثالثة.</p>
+
+    <h2>3) الخدمات الخارجية</h2>
+    <p>نستخدم محركات مجانية (Pollinations edge-tts ومساحات HuggingFace) لتوليد المحتوى. قد تُرسل نصوص الطلبات إلى هذه الخدمات لتنفيذ المطلوب فقط. إعلانات المكافآت تخضع لسياسات Google AdMob.</p>
+
+    <h2>4) أمان البيانات</h2>
+    <p>نستخدم جلسات JWT تنتهي تلقائياً، وتشفير كلمات المرور، وحدوداً لمحاولات الدخول والدفع، وتحققاً من نوع الملفات المرفوعة. يمكنك تغيير كلمة المرور أو طلب حذف حسابك في أي وقت.</p>
+
+    <h2>5) التواصل والدعم الفني</h2>
+    <div class="support-box support-card">
+      <span class="support-ico">✉️</span>
+      <span class="support-copy-text">
+        <strong>تواصل معنا / الدعم الفني</strong>
+        <small>لأي استفسار حول الدفع BEP20، النقاط، أو طلب حذف البيانات.</small>
+        <code data-support-email></code>
+      </span>
+      <span class="support-buttons">
+        <a class="primary small" href="#" data-mail-support data-subject="Hilal AI - Support Request">راسلنا عبر Gmail ↗</a>
+        <button class="copy" type="button" data-copy-support>نسخ البريد</button>
+        <a class="ghost small" href="#" data-mail-support data-subject="Hilal AI - Delete My Data">طلب حذف بياناتي</a>
+      </span>
+    </div>
+
+    <h2>6) التحديثات</h2>
+    <p>قد يتم تحديث هذه السياسة عند إضافة ميزات جديدة. ننصح بمراجعة هذه الصفحة من حين لآخر.</p>
+
+    <p class="muted" style="margin-top:26px;font-size:12px">آخر تحديث: نوفمبر 2026</p>
+  </main>
+  <div class="toast" id="supportToast"></div>
+  <script src="support.js"></script>
+</body>
+</html>
